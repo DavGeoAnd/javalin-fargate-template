@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  javalin-fargate-template:
+    image: dgandalcio/javalin-fargate-template:latest
+    container_name: javalin-fargate-template
+    hostname: docker-local
+    environment:
+      TZ: "America/Chicago"
+    ports:
+      - "10001:10000"
+    networks:
+      - develop-bridge-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 512M
+
+networks:
+  develop-bridge-network:
+    name: develop-bridge
+    external: true

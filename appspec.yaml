@@ -1,0 +1,10 @@
+version: 1.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:us-east-1:396607284401:task-definition/javalin-fargate-template-td:1"
+        LoadBalancerInfo:
+          ContainerName: "javalin-fargate-template"
+          ContainerPort: "10000"
+        PlatformVersion: "LATEST"
