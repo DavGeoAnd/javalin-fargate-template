@@ -69,6 +69,10 @@
    * 'Health check path': /template/health
    * 'Health check grace period': 120
 
+## Create ECR Repository
+1. 'Visibility settings': Private
+2. 'Repository name': javalin-fargate-template
+
 ## Create Code Pipeline
 1. 'Pipeline name': javalin-fargate-template-pipeline
 2. 'Service role': New service role

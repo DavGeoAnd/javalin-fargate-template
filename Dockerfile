@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17.0.7_7-jre-alpine
+FROM public.ecr.aws/docker/library/eclipse-temurin:17.0.7_7-jre-alpine
 
 ADD ./target/javalin-fargate-template.jar javalin-fargate-template.jar
 
