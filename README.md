@@ -69,6 +69,9 @@
    * 'Health check path': /template/health
    * 'Health check grace period': 120
 
+## Create CodeCommit Repository
+1. 'Repository name': javalin-fargate-template
+
 ## Create ECR Repository
 1. 'Visibility settings': Private
 2. 'Repository name': javalin-fargate-template
