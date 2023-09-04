@@ -79,7 +79,8 @@
 3. 'Artifact store': Default location
 4. 'Source provider': GitHub (Version 2)
 5. 'Connection': DavGeoAnd
-6. 'Create Project'
+6. 'Output artifact format': Full Clone
+7. 'Create Project'
    * 'Project name': javalin-fargate-template-build
    * 'Environment image': Managed Image
    * 'Operating system': Ubuntu
@@ -87,7 +88,7 @@
    * 'Image': latest
    * Check 'Enable this flag if you want to build Docker images or want your builds to get elevated privileges
    * 'Build specifications': Use a buildspec file
-7. 'Deploy provider': Amazon ECS
-8. 'Cluster name': dga-ms-cluster
-9. 'Service name': javalin-fargate-template-svc
-10. 'Image definitions file - optional': imagedefinitions.json
+8. 'Deploy provider': Amazon ECS
+9. 'Cluster name': dga-ms-cluster
+10. 'Service name': javalin-fargate-template-svc
+11. 'Image definitions file - optional': imagedefinitions.json
