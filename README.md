@@ -88,6 +88,7 @@
    * 'Image': latest
    * Check 'Enable this flag if you want to build Docker images or want your builds to get elevated privileges
    * 'Build specifications': Use a buildspec file
+   * 'Environment variables': GIT_BRANCH --- #{SourceVariables.BranchName}
 8. 'Deploy provider': Amazon ECS
 9. 'Cluster name': dga-ms-cluster
 10. 'Service name': javalin-fargate-template-svc
