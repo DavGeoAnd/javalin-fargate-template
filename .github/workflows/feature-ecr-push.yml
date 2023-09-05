@@ -32,6 +32,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - id: get-version
+        uses: jactions/maven-version@v1
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -60,9 +63,9 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME} .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME}
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.get-version.outputs.version }} .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.get-version.outputs.version }}
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.get-version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
