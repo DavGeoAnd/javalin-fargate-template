@@ -2,8 +2,8 @@ name: Push feature branch to ECR
 
 on:
   push:
-    branches:
-      - "feature/*"
+    branches-ignore:
+      - main
 
 jobs:
   push_to_ecr:
