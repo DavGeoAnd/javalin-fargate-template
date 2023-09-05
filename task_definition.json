@@ -1,0 +1,84 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:396607284401:task-definition/javalin-fargate-template-td:7",
+  "containerDefinitions": [
+    {
+      "name": "javalin-fargate-template",
+      "image": "396607284401.dkr.ecr.us-east-1.amazonaws.com/javalin-fargate-template:1060244",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "javalin-fargate-template-10000-tcp",
+          "containerPort": 10000,
+          "hostPort": 10000,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "/ecs/javalin-fargate-template-td",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        },
+        "secretOptions": []
+      }
+    }
+  ],
+  "family": "javalin-fargate-template-td",
+  "executionRoleArn": "arn:aws:iam::396607284401:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "revision": 7,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+    },
+    {
+      "name": "ecs.capability.execution-role-awslogs"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "name": "ecs.capability.task-eni"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+    }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "registeredAt": "2023-09-04T23:24:46.198Z",
+  "registeredBy": "arn:aws:sts::396607284401:assumed-role/AWSCodePipelineServiceRole-us-east-1-javalin-fargate-template-p/1693869885911",
+  "tags": []
+}

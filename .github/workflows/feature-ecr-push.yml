@@ -19,7 +19,7 @@ env:
   ECR_REPOSITORY: javalin-fargate-template           # set this to your Amazon ECR repository name
   ECS_SERVICE: javalin-fargate-template-svc                 # set this to your Amazon ECS service name
   ECS_CLUSTER: dga-ms-cluster                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: javalin-fargate-template-td # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION: task_definition.json # set this to the path to your Amazon ECS task definition
   CONTAINER_NAME: javalin-fargate-template           # set this to the name of the container in the
 
 jobs:
