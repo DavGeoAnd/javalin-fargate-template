@@ -201,42 +201,5 @@
                 </plugins>
             </build>
         </profile>
-
-        <profile>
-            <id>feature</id>
-            <build>
-                <plugins>
-                    <!-- https://mvnrepository.com/artifact/io.fabric8/docker-maven-plugin -->
-                    <plugin>
-                        <groupId>io.fabric8</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <version>${docker.maven.version}</version>
-                        <configuration>
-                            <images>
-                                <image>
-                                    <name>396607284401.dkr.ecr.us-east-1.amazonaws.com/${project.artifactId}:${git.branch}-${git.commit.id.abbrev}</name>
-                                </image>
-                            </images>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>docker-build-feature</id>
-                                <goals>
-                                    <goal>build</goal>
-                                </goals>
-                                <phase>install</phase>
-                            </execution>
-                            <execution>
-                                <id>docker-push-feature</id>
-                                <goals>
-                                    <goal>push</goal>
-                                </goals>
-                                <phase>install</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 </project>
