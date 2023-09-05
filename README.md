@@ -80,19 +80,28 @@
 1. 'Pipeline name': javalin-fargate-template-pipeline
 2. 'Service role': New service role
 3. 'Artifact store': Default location
-4. 'Source provider': GitHub (Version 2)
-5. 'Connection': DavGeoAnd
+4. 'Repository name': javalin-fargate-template
+5. 'Branch name': main
 6. 'Output artifact format': Full Clone
-7. 'Create Project'
-   * 'Project name': javalin-fargate-template-build
-   * 'Environment image': Managed Image
-   * 'Operating system': Ubuntu
-   * 'Runtime(s)': Standard
-   * 'Image': latest
-   * Check 'Enable this flag if you want to build Docker images or want your builds to get elevated privileges
-   * 'Build specifications': Use a buildspec file
-   * 'Environment variables': GIT_BRANCH --- #{SourceVariables.BranchName}
+7. 'Build provider': AWS CodeBuild
 8. 'Deploy provider': Amazon ECS
 9. 'Cluster name': dga-ms-cluster
 10. 'Service name': javalin-fargate-template-svc
 11. 'Image definitions file - optional': imagedefinitions.json
+
+12. 'Source provider': GitHub (Version 2)
+13. 'Connection': DavGeoAnd
+14. 'Output artifact format': Full Clone
+15. 'Create Project'
+    * 'Project name': javalin-fargate-template-build
+    * 'Environment image': Managed Image
+    * 'Operating system': Ubuntu
+    * 'Runtime(s)': Standard
+    * 'Image': latest
+    * Check 'Enable this flag if you want to build Docker images or want your builds to get elevated privileges
+    * 'Build specifications': Use a buildspec file
+    * 'Environment variables': GIT_BRANCH --- #{SourceVariables.BranchName}
+16. 'Deploy provider': Amazon ECS
+17. 'Cluster name': dga-ms-cluster
+18. 'Service name': javalin-fargate-template-svc
+19. 'Image definitions file - optional': imagedefinitions.json

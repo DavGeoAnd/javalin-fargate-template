@@ -14,7 +14,6 @@ phases:
     commands:
       - echo Build started on `date`
       - echo $IMAGE_URI
-      - echo #{SourceVariables.BranchName}
       - mvn clean package -Ddockerfile.skip
       - docker build --tag $IMAGE_URI .
   post_build:
