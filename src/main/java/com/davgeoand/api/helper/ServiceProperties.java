@@ -62,6 +62,11 @@ public class ServiceProperties {
             properties.put(attribute.getKey(), value.toString());
         });
 
+        Map<String, String> env = System.getenv();
+        for (String envName : env.keySet()) {
+            log.info("Environment variable --- " + envName + ": " + env.get(envName));
+        }
+
         assessProperties();
         setCommonAttributesMap();
         setInfoPropertiesMap();
