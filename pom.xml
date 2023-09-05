@@ -54,6 +54,13 @@
             <version>1.18.28</version>
             <scope>provided</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.11.0</version>
+        </dependency>
+
 
         <!-- otel monitoring -->
         <!-- https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-resources -->

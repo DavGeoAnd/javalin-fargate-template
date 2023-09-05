@@ -37,6 +37,37 @@ public class ServiceProperties {
                 System.exit(1);
             }
         }
+
+        assessProperties();
+        setOtlpProperties();
+        setCommonAttributesMap();
+        setInfoPropertiesMap();
+        log.info("Successfully initialized service properties");
+    }
+
+    private static void assessProperties() {
+        properties.forEach((key, value) -> {
+            log.info(key + ": " + value);
+            String valueStr = value.toString();
+            Matcher match = propertyPattern.matcher(valueStr);
+            if (match.find()) {
+                log.info("Property that uses env: " + key + " with value " + value);
+                String valueStrUpdated = valueStr.replace("[", "").replace("]", "");
+                String[] valueSplit = valueStrUpdated.split("::");
+                String envValue = System.getenv(valueSplit[0]);
+                if (envValue != null) {
+                    properties.replace(key, envValue);
+                    log.info(key + " is using env value: " + envValue);
+                } else {
+                    properties.replace(key, valueSplit[1]);
+                    log.info(key + " is using default value: " + valueSplit[1]);
+                }
+            }
+        });
+    }
+
+    private static void setOtlpProperties() {
+        log.info("Setting opentelemetry properties");
         ContainerResource.get().getAttributes().forEach((attribute, value) -> {
             log.info(attribute.getKey() + " : " + value.toString());
             properties.put(attribute.getKey(), value.toString());
@@ -62,36 +93,7 @@ public class ServiceProperties {
             properties.put(attribute.getKey(), value.toString());
         });
 
-        Map<String, String> env = System.getenv();
-        for (String envName : env.keySet()) {
-            log.info("Environment variable --- " + envName + ": " + env.get(envName));
-        }
-
-        assessProperties();
-        setCommonAttributesMap();
-        setInfoPropertiesMap();
-        log.info("Successfully initialized service properties");
-    }
-
-    private static void assessProperties() {
-        properties.forEach((key, value) -> {
-            log.info(key + ": " + value);
-            String valueStr = value.toString();
-            Matcher match = propertyPattern.matcher(valueStr);
-            if (match.find()) {
-                log.info("Property that uses env: " + key + " with value " + value);
-                String valueStrUpdated = valueStr.replace("[", "").replace("]", "");
-                String[] valueSplit = valueStrUpdated.split("::");
-                String envValue = System.getenv(valueSplit[0]);
-                if (envValue != null) {
-                    properties.replace(key, envValue);
-                    log.info(key + " is using env value: " + envValue);
-                } else {
-                    properties.replace(key, valueSplit[1]);
-                    log.info(key + " is using default value: " + valueSplit[1]);
-                }
-            }
-        });
+        log.info("Successfully set opentelemetry properties");
     }
 
     private static void setCommonAttributesMap() {
