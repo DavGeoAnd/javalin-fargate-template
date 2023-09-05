@@ -6,7 +6,7 @@ on:
       - develop
     types:
       - opened
-      - edited
+      - synchronize
 
 env:
   AWS_REGION: us-east-1
