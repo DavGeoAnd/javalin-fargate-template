@@ -1,5 +1,6 @@
 package com.davgeoand.api.controller;
 
+import com.davgeoand.api.helper.ServiceProperties;
 import com.davgeoand.api.monitor.metric.ServiceMetricHandler;
 import io.javalin.apibuilder.EndpointGroup;
 import io.javalin.http.Context;
@@ -17,6 +18,7 @@ public class AdminController {
         log.info("Returning api endpoints");
         return () -> {
             get("metrics", AdminController::metrics);
+            get("info", AdminController::info);
         };
     }
 
@@ -27,5 +29,12 @@ public class AdminController {
         context.json(meterArrayList);
         context.status(HttpStatus.OK);
         log.info("Finished admin metrics request");
+    }
+
+    private static void info(Context context) {
+        log.info("Starting admin info request");
+        context.json(ServiceProperties.getInfoPropertiesMap());
+        context.status(HttpStatus.OK);
+        log.info("Finished admin info request");
     }
 }
