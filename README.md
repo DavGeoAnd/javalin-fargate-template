@@ -77,9 +77,16 @@
 2. 'Repository name': javalin-fargate-template
 
 ## Create Code Pipeline
-1. 'Pipeline name': javalin-fargate-template-pipeline
+1. 'Pipeline name': javalin-fargate-template-feature-pipeline
 2. 'Service role': New service role
 3. 'Artifact store': Default location
+4. 'Source provider': Amazon ECR
+5. 'Repository name': javalin-fargate-template
+6. 'Image tag - optional': feature*
+7. 'Build provider': AWS CodeBuild
+
+
+
 4. 'Repository name': javalin-fargate-template
 5. 'Branch name': main
 6. 'Output artifact format': Full Clone
