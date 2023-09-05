@@ -8,3 +8,4 @@ Resources:
           ContainerName: "javalin-fargate-template"
           ContainerPort: "10000"
         PlatformVersion: "LATEST"
+        DesiredCount: 1
