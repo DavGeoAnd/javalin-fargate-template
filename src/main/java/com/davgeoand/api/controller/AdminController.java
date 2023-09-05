@@ -53,7 +53,7 @@ public class AdminController {
                 .build();
         Call call = client.newCall(request);
         Response response = call.execute();
-        context.json(response);
+        context.json(response.body().string());
         context.status(HttpStatus.OK);
         log.info("Finished admin aws request");
     }
