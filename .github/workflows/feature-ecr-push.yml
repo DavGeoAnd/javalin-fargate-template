@@ -17,6 +17,10 @@ on:
 env:
   AWS_REGION: us-east-1                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: javalin-fargate-template           # set this to your Amazon ECR repository name
+  ECS_SERVICE: javalin-fargate-template-svc                 # set this to your Amazon ECS service name
+  ECS_CLUSTER: dga-ms-cluster                 # set this to your Amazon ECS cluster name
+  ECS_TASK_DEFINITION: javalin-fargate-template-td # set this to the path to your Amazon ECS task definition
+  CONTAINER_NAME: javalin-fargate-template           # set this to the name of the container in the
 
 jobs:
   Push:
@@ -59,3 +63,19 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME} .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME}
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
