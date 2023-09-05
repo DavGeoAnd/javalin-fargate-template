@@ -7,20 +7,20 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Deploy to Amazon ECS
+name: Push Feature Branch to Amazon ECS
 
 on:
   push:
     branches:
-      - main
+      - feature*
 
 env:
   AWS_REGION: us-east-1                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: javalin-fargate-template           # set this to your Amazon ECR repository name
 
 jobs:
-  deploy:
-    name: Deploy
+  Push:
+    name: Push
     runs-on: ubuntu-latest
     environment: production
 
@@ -52,10 +52,11 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${GITHUB_REF_NAME}-${GITHUB_SHA::7}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME}-${GITHUB_SHA::7} .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME}-${GITHUB_SHA::7}
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME}-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
