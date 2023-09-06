@@ -16,7 +16,6 @@
         <otel.version>1.29.0</otel.version>
         <service.version>${project.version}</service.version>
         <mainClass>com.davgeoand.api.ServiceRunner</mainClass>
-        <docker.maven.version>0.43.0</docker.maven.version>
     </properties>
 
     <dependencies>
@@ -53,6 +52,18 @@
             <artifactId>lombok</artifactId>
             <version>1.18.28</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.11.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20230618</version>
         </dependency>
 
         <!-- otel monitoring -->
@@ -158,48 +169,36 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
+
+            <!-- https://mvnrepository.com/artifact/io.fabric8/docker-maven-plugin -->
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.43.0</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>dgandalcio/${project.artifactId}:latest</name>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>docker-remove-local</id>
+                        <goals>
+                            <goal>remove</goal>
+                        </goals>
+                        <phase>install</phase>
+                    </execution>
+                    <execution>
+                        <id>docker-build-local</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <phase>install</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>local</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- https://mvnrepository.com/artifact/io.fabric8/docker-maven-plugin -->
-                    <plugin>
-                        <groupId>io.fabric8</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <version>${docker.maven.version}</version>
-                        <configuration>
-                            <images>
-                                <image>
-                                    <name>${project.artifactId}:latest</name>
-                                </image>
-                            </images>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>docker-remove-local</id>
-                                <goals>
-                                    <goal>remove</goal>
-                                </goals>
-                                <phase>install</phase>
-                            </execution>
-                            <execution>
-                                <id>docker-build-local</id>
-                                <goals>
-                                    <goal>build</goal>
-                                </goals>
-                                <phase>install</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>

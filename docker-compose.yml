@@ -1,11 +1,16 @@
 version: '3.8'
 services:
   javalin-fargate-template:
-    image: javalin-fargate-template:latest
+    image: dgandalcio/javalin-fargate-template:latest
     container_name: javalin-fargate-template
     hostname: docker-local
     environment:
       TZ: "America/Chicago"
+      SERVICE_EVENT_TYPE: "influxdb"
+      SERVICE_EVENT_INFLUXDB_URL: "https://us-east-1-1.aws.cloud2.influxdata.com"
+      SERVICE_EVENT_INFLUXDB_TOKEN: "zor2gxC0wIbP60DDMExXYZj2838buTsgKtLnKXDQ5yZNw9NPD3rLsyna-dX1NIokMD1jdsnbDvCLVj0wou4jRQ=="
+      SERVICE_EVENT_INFLUXDB_ORG: "Dev"
+      OTEL_RESOURCE_ATTRIBUTES: "service.name=javalin-fargate-template,service.env=local,service.framework=javalin"
     ports:
       - "10001:10000"
     networks:
