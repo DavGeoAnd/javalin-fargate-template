@@ -60,7 +60,12 @@
             <artifactId>okhttp</artifactId>
             <version>4.11.0</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20230618</version>
+        </dependency>
 
         <!-- otel monitoring -->
         <!-- https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-resources -->
