@@ -178,7 +178,7 @@
                 <configuration>
                     <images>
                         <image>
-                            <name>${project.artifactId}:latest</name>
+                            <name>dgandalcio/${project.artifactId}:latest</name>
                         </image>
                     </images>
                 </configuration>
