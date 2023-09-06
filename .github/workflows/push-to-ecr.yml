@@ -17,7 +17,7 @@ env:
   ECS_CLUSTER: dga-microservices
 
 jobs:
-  push_to-dev:
+  push_to-ecr:
     name: Push Image to ECR
     runs-on: ubuntu-latest
     environment: prod
@@ -60,7 +60,7 @@ jobs:
 
       - name: Download task definition
         run: |
-          aws ecs describe-task-definition --task-definition javalin-fargate-template-dev --query taskDefinition > task-definition.json
+          aws ecs describe-task-definition --task-definition javalin-fargate-template --query taskDefinition > task-definition.json
           
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
