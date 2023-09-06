@@ -20,6 +20,7 @@ public class ServiceEventHandler {
         String eventHandlerType = ServiceProperties.getProperty(Constants.SERVICE_EVENT_TYPE).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_EVENT_TYPE));
         switch (eventHandlerType) {
             case "log" -> eventHandler = new LogEventHandler();
+            case "influxdb" -> eventHandler = new InfluxEventHandler();
             default -> {
                 log.warn("Invalid service event handler type. Defaulting to LogEventHandler");
                 eventHandler = new LogEventHandler();

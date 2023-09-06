@@ -1,6 +1,8 @@
 package com.davgeoand.api.helper;
 
 import com.davgeoand.api.exception.MissingPropertyException;
+import io.micrometer.core.instrument.ImmutableTag;
+import io.micrometer.core.instrument.Tag;
 import io.opentelemetry.instrumentation.resources.*;
 import io.opentelemetry.sdk.autoconfigure.ResourceConfiguration;
 import lombok.AccessLevel;
@@ -14,10 +16,7 @@ import okhttp3.Response;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -105,6 +104,7 @@ public class ServiceProperties {
     private static void setAwsProperties() {
         log.info("Setting aws properties");
         try {
+            properties.put("aws.region", System.getenv("AWS_REGION"));
             String ecsMetadataUrl = System.getenv("ECS_CONTAINER_METADATA_URI_V4") + "/task";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -114,7 +114,7 @@ public class ServiceProperties {
             Response response = call.execute();
             String responseString = response.body().string();
             JSONObject jsonObject = new JSONObject(responseString);
-            properties.put("availability.zone", jsonObject.getString("AvailabilityZone"));
+            properties.put("aws.availability.zone", jsonObject.getString("AvailabilityZone"));
         } catch (Exception e) {
             log.warn("Issue setting aws properties", e);
         }
@@ -151,5 +151,11 @@ public class ServiceProperties {
 
     public static Optional<String> getProperty(String property) {
         return Optional.ofNullable(properties.getProperty(property));
+    }
+
+    public static Iterable<Tag> getCommonAttributeTags() {
+        ArrayList<Tag> tagsIterable = new ArrayList<>();
+        commonAttributesMap.forEach((key, value) -> tagsIterable.add(new ImmutableTag(key, value)));
+        return tagsIterable;
     }
 }

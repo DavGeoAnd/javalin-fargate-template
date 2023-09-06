@@ -1,5 +1,6 @@
 package com.davgeoand.api.monitor.metric;
 
+import com.davgeoand.api.helper.ServiceProperties;
 import io.javalin.micrometer.MicrometerPlugin;
 import io.javalin.plugin.Plugin;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -20,6 +21,7 @@ public class ServiceMetricHandler {
     public static void init() {
         log.info("Initializing service metric handler");
         meterRegistry = Metrics.globalRegistry;
+        meterRegistry.config().commonTags(ServiceProperties.getCommonAttributeTags());
         new ClassLoaderMetrics().bindTo(meterRegistry);
         new JvmCompilationMetrics().bindTo(meterRegistry);
         new JvmGcMetrics().bindTo(meterRegistry);
