@@ -7,6 +7,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,6 +45,7 @@ public class ServiceProperties {
 
         assessProperties();
         setOtlpProperties();
+        setAwsProperties();
         setCommonAttributesMap();
         setInfoPropertiesMap();
         log.info("Successfully initialized service properties");
@@ -94,6 +100,25 @@ public class ServiceProperties {
         });
 
         log.info("Successfully set opentelemetry properties");
+    }
+
+    private static void setAwsProperties() {
+        log.info("Setting aws properties");
+        try {
+            String ecsMetadataUrl = System.getenv("ECS_CONTAINER_METADATA_URI_V4") + "/task";
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(ecsMetadataUrl)
+                    .build();
+            Call call = client.newCall(request);
+            Response response = call.execute();
+            String responseString = response.body().string();
+            JSONObject jsonObject = new JSONObject(responseString);
+            properties.put("availability.zone", jsonObject.getString("AvailabilityZone"));
+        } catch (Exception e) {
+            log.warn("Issue setting aws properties", e);
+        }
+        log.info("Successfully set aws properties");
     }
 
     private static void setCommonAttributesMap() {
