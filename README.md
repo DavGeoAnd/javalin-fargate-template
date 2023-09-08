@@ -57,9 +57,9 @@
 ## Create Service
 1. Existing cluster: dga-microservices
 2. Compute options: Launch type
-3. Service name: javalin-fargate-template[-standby]
+3. Service name: javalin-fargate-template
 4. Subnets
-    * 1a, 1b (standby)
+    * 1a, 1b
 5. Security group: dga-ms-ecs-sg
     * Security group name: dga-ms-ecs-sg
     * Security group description: open ports for dga microservices
