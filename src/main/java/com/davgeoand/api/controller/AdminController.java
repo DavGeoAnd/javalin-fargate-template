@@ -16,7 +16,7 @@ import static io.javalin.apibuilder.ApiBuilder.get;
 @Slf4j
 public class AdminController {
     public static EndpointGroup getAdminEndpoints() {
-        log.info("Returning api endpoints");
+        log.info("Returning admin api endpoints");
         return () -> {
             before(context -> {
                 context.attribute("audit", true);
@@ -37,7 +37,7 @@ public class AdminController {
 
     private static void info(Context context) {
         log.info("Starting admin info request");
-        context.json(ServiceProperties.getInfoPropertiesMap());
+        context.json(ServiceProperties.getCommonAndInfoProperties());
         context.status(HttpStatus.OK);
         log.info("Finished admin info request");
     }

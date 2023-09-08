@@ -145,8 +145,15 @@ public class ServiceProperties {
         for (String infoProperty : infoProperties) {
             infoPropertiesMap.put(infoProperty, getProperty(infoProperty).orElseThrow(() -> new MissingPropertyException(infoProperty)));
         }
-        infoPropertiesMap.putAll(commonAttributesMap);
         log.info("Successfully set info properties as a map");
+    }
+
+    public static Map<String, String> getCommonAndInfoProperties() {
+        log.info("Getting common and info properties");
+        Map<String, String> commonInfoMap = new HashMap<>(commonAttributesMap);
+        commonInfoMap.putAll(infoPropertiesMap);
+        log.info("Successfully got common and info properties");
+        return commonInfoMap;
     }
 
     public static Optional<String> getProperty(String property) {

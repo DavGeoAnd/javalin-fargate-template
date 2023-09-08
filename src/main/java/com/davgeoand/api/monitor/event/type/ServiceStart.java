@@ -5,25 +5,27 @@ import com.influxdb.client.write.Point;
 import lombok.Builder;
 import lombok.ToString;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Builder(toBuilder = true)
 @ToString(callSuper = true)
 public class ServiceStart extends Event {
-    private String buildVersion;
-    private String gitBranch;
-    private String gitCommitId;
+    private Map<String, String> infoProperties;
     private long startTime;
     private long serviceStartDuration;
-    private String javaVersion;
 
     @Override
     public Point toPoint() {
+        Map<String, Object> replaceCharMap = new HashMap<>();
+        infoProperties.forEach((key, value) -> {
+            String newKey = key.replace('.', '_');
+            replaceCharMap.put(newKey, value);
+        });
         return Point.measurement("service_start")
-                .addField("build_version", buildVersion)
-                .addField("git_branch", gitBranch)
-                .addField("git_commit_id", gitCommitId)
+                .addFields(replaceCharMap)
                 .addField("start_time", startTime)
                 .addField("service_start_duration", serviceStartDuration)
-                .addField("java_version", javaVersion)
                 .time(time, WritePrecision.MS);
     }
 }

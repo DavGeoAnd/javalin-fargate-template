@@ -79,17 +79,10 @@ public class JavalinService {
             eventListener.serverStarted(() -> {
                 long serviceStartDuration = System.currentTimeMillis() - startServiceTime;
                 try {
-                    String buildVersion = ServiceProperties.getProperty(Constants.SERVICE_VERSION).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_VERSION));
-                    String gitBranch = ServiceProperties.getProperty(Constants.GIT_BRANCH).orElseThrow(() -> new MissingPropertyException(Constants.GIT_BRANCH));
-                    String gitCommitId = ServiceProperties.getProperty(Constants.GIT_COMMIT).orElseThrow(() -> new MissingPropertyException(Constants.GIT_COMMIT));
-                    String javaVersion = ServiceProperties.getProperty(Constants.PROCESS_RUNTIME_VERSION).orElseThrow(() -> new MissingPropertyException(Constants.PROCESS_RUNTIME_VERSION));
                     long startTime = ManagementFactory.getRuntimeMXBean().getStartTime();
                     ServiceEventHandler.addEvent(ServiceStart.builder()
+                            .infoProperties(ServiceProperties.getInfoPropertiesMap())
                             .serviceStartDuration(serviceStartDuration)
-                            .buildVersion(buildVersion)
-                            .gitBranch(gitBranch)
-                            .gitCommitId(gitCommitId)
-                            .javaVersion(javaVersion)
                             .startTime(startTime)
                             .build());
                 } catch (MissingPropertyException missingPropertyException) {
@@ -104,7 +97,7 @@ public class JavalinService {
         log.info("Setting up Audit event");
         javalin.updateConfig((javalinConfig -> {
             javalinConfig.requestLogger.http(((ctx, ms) -> {
-                if(Objects.equals(ctx.attribute("audit"), true)){
+                if (Objects.equals(ctx.attribute("audit"), true)) {
                     String requestPath = ctx.endpointHandlerPath();
                     HttpStatus httpStatus = ctx.status();
                     HandlerType method = ctx.method();
