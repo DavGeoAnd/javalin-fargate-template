@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
 
       - id: get-version
-        uses: jactions/maven-version@v1
+        uses: jactions/maven-version@v1.2.0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
