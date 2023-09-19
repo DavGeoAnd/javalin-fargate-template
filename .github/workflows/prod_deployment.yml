@@ -13,7 +13,7 @@ env:
   ECS_TASK_DEFINITION: task-definition.json
   CONTAINER_NAME: javalin-fargate-template
   ECS_SERVICE: javalin-fargate-template
-  ECS_CLUSTER: dga-microservices
+  ECS_CLUSTER: microservices
 
 jobs:
   push_to-ecr:
