@@ -4,19 +4,13 @@ services:
     image: dgandalcio/javalin-fargate-template:latest
     container_name: javalin-fargate-template
     hostname: docker-local
+    env_file:
+      - docker_config/otel_elastic_cloud.env
+#      - docker_config/influxdb_service_event_cloud.env
+#      - docker_config/otel_local.env
+#      - docker_config/otel_nr.env
     environment:
-      TZ: "America/Chicago"
-      SERVICE_EVENT_TYPE: "influxdb"
-      SERVICE_EVENT_INFLUXDB_URL: "https://us-east-1-1.aws.cloud2.influxdata.com"
-      SERVICE_EVENT_INFLUXDB_TOKEN: "zor2gxC0wIbP60DDMExXYZj2838buTsgKtLnKXDQ5yZNw9NPD3rLsyna-dX1NIokMD1jdsnbDvCLVj0wou4jRQ=="
-      SERVICE_EVENT_INFLUXDB_ORG: "microservices"
-      OTEL_RESOURCE_ATTRIBUTES: "service.name=javalin-fargate-template,service.env=local,service.framework=javalin"
-      OTEL_EXPERIMENTAL_RESOURCE_DISABLED_KEYS: "host.arch,os.description,os.type,otel.library.name,process.command_args,process.executable.path,process.pid,process.runtime.description,process.runtime.name,process.runtime.version,telemetry.auto.version,telemetry.sdk.name,telemetry.sdk.version"
-      OTEL_TRACES_EXPORTER: "otlp"
-#      OTEL_TRACES_EXPORTER: "logging"
-      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "https://tempo-prod-04-prod-us-east-0.grafana.net"
-      OTEL_EXPORTER_OTLP_TRACES_HEADERS: "Authorization=Basic NjYzMzk2OmdsY19leUp2SWpvaU9URTVOVGszSWl3aWJpSTZJblJsYlhCdkxYZHlhWFJsTFhObGNuWnBZMlV0ZEhKaFkyVnpJaXdpYXlJNklscEJlR2RUTURFeVMzWTJOVmR3TlU4eE1qWjZUVlZQTnlJc0ltMGlPbnNpY2lJNkluQnliMlF0ZFhNdFpXRnpkQzB3SW4xOQ=="
-      OTEL_TRACES_SAMPLER: "dga"
+      TZ: "UTC"
     ports:
       - "10001:10000"
     networks:
