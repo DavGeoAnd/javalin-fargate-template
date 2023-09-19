@@ -6,15 +6,15 @@
 
     <groupId>com.davgeoand.api</groupId>
     <artifactId>javalin-fargate-template</artifactId>
-    <version>5.6.2</version>
+    <version>${javalin.version}</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javalin.version>5.6.2</javalin.version>
-        <otel.version>1.29.0</otel.version>
         <service.version>${project.version}</service.version>
+        <javalin.version>5.6.2</javalin.version>
+        <otel.version>1.30.0</otel.version>
         <mainClass>com.davgeoand.api.ServiceRunner</mainClass>
     </properties>
 
@@ -77,6 +77,11 @@
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-instrumentation-annotations</artifactId>
             <version>${otel.version}</version>
         </dependency>
 

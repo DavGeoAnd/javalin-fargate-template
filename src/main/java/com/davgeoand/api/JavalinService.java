@@ -27,9 +27,7 @@ public class JavalinService {
 
     public JavalinService() {
         log.info("Initializing javalin-fargate-template");
-        javalin = Javalin.create(javalinConfig -> {
-            javalinConfig.routing.contextPath = "template";
-        });
+        javalin = Javalin.create();
         startingSteps();
         log.info("Successfully initialized javalin-fargate-template");
     }
@@ -124,11 +122,13 @@ public class JavalinService {
     private void routes() {
         log.info("Setting up routes");
         javalin.routes(() -> {
-            get("health", context -> {
-                context.attribute("audit", false);
-                context.status(HttpStatus.OK);
+            path("template", () -> {
+                get("health", context -> {
+                    context.attribute("audit", false);
+                    context.status(HttpStatus.OK);
+                });
+                path("admin", AdminController.getAdminEndpoints());
             });
-            path("admin", AdminController.getAdminEndpoints());
         });
         log.info("Successfully set up routes");
     }
