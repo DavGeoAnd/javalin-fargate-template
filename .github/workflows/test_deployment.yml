@@ -1,12 +1,9 @@
 name: Test Deployment
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
-    types:
-      - opened
-      - synchronize
+      - feature/*
 
 env:
   AWS_REGION: us-east-1
@@ -25,6 +22,13 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            test:
+              - 'env_files/test/**'
 
       - id: get-version
         uses: jactions/maven-version@v1.2.0
@@ -45,6 +49,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Update .env in S3
+        if: steps.changes.outputs.test == 'true'
+        run: aws s3 cp env_files/test/ s3://microservices-396607284401/javalin-fargate-template/test/ --recursive
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -54,9 +62,9 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.get-version.outputs.version }}-${GITHUB_SHA::7} --build-arg service_version=${{ steps.get-version.outputs.version }} --build-arg service_env=test .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.get-version.outputs.version }}-${GITHUB_SHA::7}
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.get-version.outputs.version }}-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME#feature/}-${GITHUB_SHA::7} --build-arg service_version=${{ steps.get-version.outputs.version }} --build-arg service_env=test .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME#feature/}-${GITHUB_SHA::7}
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF_NAME#feature/}-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
       - name: Download task definition
         run: |
