@@ -5,10 +5,8 @@ services:
     container_name: javalin-fargate-template
     hostname: docker-local
     env_file:
-      - docker_config/otel_elastic_cloud.env
-#      - docker_config/influxdb_service_event_cloud.env
-#      - docker_config/otel_local.env
-#      - docker_config/otel_nr.env
+      - docker_config/local_event_influxdb.env
+      - docker_config/local_metric_influxdb.env
     environment:
       TZ: "UTC"
     ports:

@@ -1,8 +1,13 @@
 package com.davgeoand.api.monitor.metric;
 
+import com.davgeoand.api.exception.MissingPropertyException;
+import com.davgeoand.api.helper.Constants;
 import com.davgeoand.api.helper.ServiceProperties;
+import com.davgeoand.api.monitor.event.handler.LogEventHandler;
+import com.davgeoand.api.monitor.metric.config.InfluxDBConfig;
 import io.javalin.micrometer.MicrometerPlugin;
 import io.javalin.plugin.Plugin;
+import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.binder.jvm.*;
@@ -10,6 +15,7 @@ import io.micrometer.core.instrument.binder.logging.LogbackMetrics;
 import io.micrometer.core.instrument.binder.system.FileDescriptorMetrics;
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
 import io.micrometer.core.instrument.binder.system.UptimeMetrics;
+import io.micrometer.influx.InfluxMeterRegistry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +26,15 @@ public class ServiceMetricHandler {
 
     public static void init() {
         log.info("Initializing service metric handler");
-        meterRegistry = Metrics.globalRegistry;
+        String serviceMetricRegistryType = ServiceProperties.getProperty(Constants.SERVICE_METRIC_REGISTRY_TYPE).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_METRIC_REGISTRY_TYPE));
+        switch (serviceMetricRegistryType) {
+            case "global" -> meterRegistry = Metrics.globalRegistry;
+            case "influxdb" -> meterRegistry = new InfluxMeterRegistry(new InfluxDBConfig(), Clock.SYSTEM);
+            default -> {
+                log.warn("Invalid service metric registry type. Defaulting to global registry");
+                meterRegistry = Metrics.globalRegistry;
+            }
+        }
         meterRegistry.config().commonTags(ServiceProperties.getCommonAttributeTags());
         new ClassLoaderMetrics().bindTo(meterRegistry);
         new JvmCompilationMetrics().bindTo(meterRegistry);
