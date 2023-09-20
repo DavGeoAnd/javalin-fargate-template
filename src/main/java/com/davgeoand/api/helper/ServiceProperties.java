@@ -97,7 +97,6 @@ public class ServiceProperties {
             log.info(attribute.getKey() + " : " + value.toString());
             properties.put(attribute.getKey(), value.toString());
         });
-
         log.info("Successfully set opentelemetry properties");
     }
 

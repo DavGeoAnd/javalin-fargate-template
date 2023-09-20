@@ -12,7 +12,6 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <service.version>${project.version}</service.version>
         <javalin.version>5.6.2</javalin.version>
         <otel.version>1.30.0</otel.version>
         <mainClass>com.davgeoand.api.ServiceRunner</mainClass>
@@ -91,6 +90,14 @@
             <groupId>com.influxdb</groupId>
             <artifactId>influxdb-client-java</artifactId>
             <version>6.10.0</version>
+        </dependency>
+
+        <!-- metric monitoring -->
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-influx -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-influx</artifactId>
+            <version>1.10.1</version>
         </dependency>
     </dependencies>
 

@@ -67,6 +67,11 @@
 1. 'Visibility settings': Private
 2. 'Repository name': javalin-fargate-template
 
+## Create S3 Bucket (if needed)
+1. General configuration
+   * Bucket name: microservices-396607284401 (account id)
+   * AWS Region: us-east-1
+
 ## Create Cluster (if needed)
 1. Cluster configuration
    * Cluster name: microservices
@@ -88,7 +93,17 @@
       * Protocol: TCP
       * App protocol: HTTP
 
-## Create Service
+## Create Test Service
+1. Existing cluster: microservices
+2. Compute options: Launch type
+3. Service name: javalin-fargate-template-test
+4. Desired tasks: 1
+5. VPC: dga-vpc
+6. Subnets
+   * 1a, 1b
+7. Security group: dga-ms-ecs-sg
+
+## Create Prod Service
 1. Existing cluster: microservices
 2. Compute options: Launch type
 3. Service name: javalin-fargate-template
@@ -96,7 +111,7 @@
 5. VPC: dga-vpc
 6. Subnets
     * 1a, 1b
-7. Security group: dga-ms-ecs-sg 
+7. Security group: dga-ms-ecs-sg
 8. Load balancer type: Application Load Balancer
 9. Application Load Balancer: Use an existing load balancer
 10. Load balancer: microservices

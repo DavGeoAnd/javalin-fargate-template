@@ -21,10 +21,10 @@ public class InfluxEventHandler implements EventHandler {
     public InfluxEventHandler() {
         log.info("Initializing InfluxDB ServiceEventHandler");
         InfluxDBClient influxDBClient = InfluxDBClientFactory.create(
-                ServiceProperties.getProperty(Constants.SERVICE_EVENT_INFLUXDB_URL).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_EVENT_INFLUXDB_URL)),
-                ServiceProperties.getProperty(Constants.SERVICE_EVENT_INFLUXDB_TOKEN).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_EVENT_INFLUXDB_TOKEN)).toCharArray(),
-                ServiceProperties.getProperty(Constants.SERVICE_EVENT_INFLUXDB_ORG).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_EVENT_INFLUXDB_ORG)),
-                ServiceProperties.getProperty(Constants.SERVICE_EVENT_INFLUXDB_BUCKET).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_EVENT_INFLUXDB_BUCKET))
+                ServiceProperties.getProperty(Constants.SERVICE_EVENT_HANDLER_INFLUXDB_URL).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_EVENT_HANDLER_INFLUXDB_URL)),
+                ServiceProperties.getProperty(Constants.SERVICE_EVENT_HANDLER_INFLUXDB_TOKEN).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_EVENT_HANDLER_INFLUXDB_TOKEN)).toCharArray(),
+                ServiceProperties.getProperty(Constants.SERVICE_EVENT_HANDLER_INFLUXDB_ORG).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_EVENT_HANDLER_INFLUXDB_ORG)),
+                ServiceProperties.getProperty(Constants.SERVICE_EVENT_HANDLER_INFLUXDB_BUCKET).orElseThrow(() -> new MissingPropertyException(Constants.SERVICE_EVENT_HANDLER_INFLUXDB_BUCKET))
         );
         log.info("Sending events to InfluxDB version: " + influxDBClient.version());
         writeApiBlocking = influxDBClient.getWriteApiBlocking();
