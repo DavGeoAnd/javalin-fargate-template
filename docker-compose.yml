@@ -7,6 +7,7 @@ services:
     env_file:
       - docker_config/local_event_influxdb.env
       - docker_config/local_metric_influxdb.env
+      - docker_config/local_log_logstash.env
     environment:
       TZ: "UTC"
     ports:
