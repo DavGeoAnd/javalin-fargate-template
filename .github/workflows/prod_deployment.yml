@@ -25,6 +25,13 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            prod:
+              - 'env_files/prod/**'
+
       - id: get-version
         uses: jactions/maven-version@v1.2.0
 
@@ -43,6 +50,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Update .env in S3
+        if: steps.changes.outputs.prod == 'true'
+        run: aws s3 cp env_files/prod/ s3://microservices-396607284401/javalin-fargate-template/prod/ --recursive
 
       - name: Login to Amazon ECR
         id: login-ecr

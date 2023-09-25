@@ -1,11 +1,17 @@
 FROM 396607284401.dkr.ecr.us-east-1.amazonaws.com/java-otel-agent:17.0.7_7-1.30.0
 
 ADD ./target/javalin-fargate-template.jar javalin-fargate-template.jar
+ADD ./target/lib lib
 
 ARG service_version=latest
 ARG service_env=local
-ENV OTEL_RESOURCE_ATTRIBUTES="service.name=javalin-fargate-template,service.version=${service_version},service.env=${service_env},service.framework=javalin"
+
+ENV SERVICE_NAME=javalin-fargate-template
+ENV SERVICE_VERSION=${service_version}
+ENV SERVICE_ENV=${service_env}
+ENV SERVICE_FRAMEWORK=javalin
+ENV OTEL_RESOURCE_ATTRIBUTES="service.name=$SERVICE_NAME,service.version=$SERVICE_VERSION,service.env=$SERVICE_ENV,service.framework=$SERVICE_FRAMEWORK"
 
 EXPOSE 10000
 
-CMD java $JAVA_OPTS -Dlogback.configurationFile=logbackConsole.xml -jar javalin-fargate-template.jar
+CMD java $JAVA_OPTS -jar javalin-fargate-template.jar
