@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+    <Properties>
+        <Property name="SimpleLogPattern">[%date{DEFAULT}] [%level] [%thread] [%logger{1.}] - %message %rException%n
+        </Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${SimpleLogPattern}"/>
+        </Console>
+
+        <Console name="ConsoleJson" target="SYSTEM_OUT">
+            <EcsLayout serviceName="${env:SERVICE_NAME:-}" serviceVersion="${env:SERVICE_VERSION:-}"
+                       serviceEnvironment="${env:SERVICE_ENV:-}" serviceNodeName="${hostName}">
+                <KeyValuePair key="aws.region" value="${env:AWS_REGION:-}"/>
+            </EcsLayout>
+        </Console>
+
+        <Http name="HttpElasticsearch" url="${env:ELASTICSEARCH_URL:-http://localhost:9200}/service_logs-javalin/_doc">
+            <EcsLayout serviceName="${env:SERVICE_NAME:-}" serviceVersion="${env:SERVICE_VERSION:-}"
+                       serviceEnvironment="${env:SERVICE_ENV:-}" serviceNodeName="${hostName}">
+                <KeyValuePair key="aws.region" value="${env:AWS_REGION:-}"/>
+            </EcsLayout>
+            <Property name="Authorization" value="ApiKey ${env:ELASTIC_AUTH_API:-replaceWithKey}" />
+        </Http>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console" level="${env:CONSOLE_LEVEL:-info}"/>
+            <AppenderRef ref="ConsoleJson" level="${env:CONSOLE_JSON_LEVEL:-off}"/>
+            <AppenderRef ref="HttpElasticsearch" level="${env:HTTP_ELASTICSEARCH_LEVEL:-off}"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
