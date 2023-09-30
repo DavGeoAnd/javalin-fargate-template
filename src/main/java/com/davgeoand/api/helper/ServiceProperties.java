@@ -42,12 +42,20 @@ public class ServiceProperties {
             }
         }
 
+        systemVariables();
         assessProperties();
         setOtlpProperties();
         setAwsProperties();
         setCommonAttributesMap();
         setInfoPropertiesMap();
         log.info("Successfully initialized service properties");
+    }
+
+    private static void systemVariables() {
+        Map<String, String> env = System.getenv();
+        for (String envName : env.keySet()) {
+            log.info(envName + " : " + env.get(envName));
+        }
     }
 
     private static void assessProperties() {
