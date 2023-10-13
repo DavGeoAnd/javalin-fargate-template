@@ -3,20 +3,16 @@ package com.davgeoand.api.helper;
 import com.davgeoand.api.exception.MissingPropertyException;
 import io.micrometer.core.instrument.ImmutableTag;
 import io.micrometer.core.instrument.Tag;
-import io.opentelemetry.instrumentation.resources.*;
-import io.opentelemetry.sdk.autoconfigure.ResourceConfiguration;
+import io.opentelemetry.sdk.autoconfigure.spi.ResourceProvider;
+import io.opentelemetry.sdk.autoconfigure.spi.internal.DefaultConfigProperties;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +41,6 @@ public class ServiceProperties {
         systemVariables();
         assessProperties();
         setOtlpProperties();
-        setAwsProperties();
         setCommonAttributesMap();
         setInfoPropertiesMap();
         log.info("Successfully initialized service properties");
@@ -81,51 +76,19 @@ public class ServiceProperties {
 
     private static void setOtlpProperties() {
         log.info("Setting opentelemetry properties");
-        ContainerResource.get().getAttributes().forEach((attribute, value) -> {
-            log.info(attribute.getKey() + " : " + value.toString());
-            properties.put(attribute.getKey(), value.toString());
-        });
-        HostResource.get().getAttributes().forEach((attribute, value) -> {
-            log.info(attribute.getKey() + " : " + value.toString());
-            properties.put(attribute.getKey(), value.toString());
-        });
-        OsResource.get().getAttributes().forEach((attribute, value) -> {
-            log.info(attribute.getKey() + " : " + value.toString());
-            properties.put(attribute.getKey(), value.toString());
-        });
-        ProcessResource.get().getAttributes().forEach((attribute, value) -> {
-            log.info(attribute.getKey() + " : " + value.toString());
-            properties.put(attribute.getKey(), value.toString());
-        });
-        ProcessRuntimeResource.get().getAttributes().forEach((attribute, value) -> {
-            log.info(attribute.getKey() + " : " + value.toString());
-            properties.put(attribute.getKey(), value.toString());
-        });
-        ResourceConfiguration.createEnvironmentResource().getAttributes().forEach((attribute, value) -> {
-            log.info(attribute.getKey() + " : " + value.toString());
-            properties.put(attribute.getKey(), value.toString());
-        });
-        log.info("Successfully set opentelemetry properties");
-    }
 
-    private static void setAwsProperties() {
-        log.info("Setting aws properties");
-        try {
-            properties.put("aws.region", System.getenv("AWS_REGION"));
-            String ecsMetadataUrl = System.getenv("ECS_CONTAINER_METADATA_URI_V4") + "/task";
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(ecsMetadataUrl)
-                    .build();
-            Call call = client.newCall(request);
-            Response response = call.execute();
-            String responseString = response.body().string();
-            JSONObject jsonObject = new JSONObject(responseString);
-            properties.put("aws.availability.zone", jsonObject.getString("AvailabilityZone"));
-        } catch (Exception e) {
-            log.warn("Issue setting aws properties", e);
-        }
-        log.info("Successfully set aws properties");
+        Supplier<Map<String, String>> propertiesSupplier = Collections::emptyMap;
+        ServiceLoader<ResourceProvider> serviceLoader = ServiceLoader.load(ResourceProvider.class);
+        serviceLoader.forEach((resourceProvider -> {
+            log.info(resourceProvider.toString());
+            log.info(resourceProvider.createResource(DefaultConfigProperties.create(propertiesSupplier.get())).toString());
+
+            resourceProvider.createResource(DefaultConfigProperties.create(propertiesSupplier.get())).getAttributes().forEach(((attributeKey, o) -> {
+                properties.put(attributeKey.getKey(), o.toString());
+            }));
+        }));
+
+        log.info("Successfully set opentelemetry properties");
     }
 
     private static void setCommonAttributesMap() {

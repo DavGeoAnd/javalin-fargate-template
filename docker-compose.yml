@@ -5,10 +5,11 @@ services:
     container_name: javalin-fargate-template
     hostname: docker-local
     env_file:
-      - docker_config/local_event_influxdb.env
-      - docker_config/local_metric_influxdb.env
-      - docker_config/local_log_log4j2.env
-      - docker_config/local_trace_tempo.env
+      #      - docker_config/local_event_influxdb.env
+      #      - docker_config/local_metric_influxdb.env
+      #      - docker_config/local_log_log4j2.env
+      #      - docker_config/local_trace_tempo.env
+      - docker_config/otel_nr.env
     environment:
       TZ: "UTC"
     ports:
@@ -18,8 +19,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
-          memory: 512M
+          cpus: '1'
+          memory: 1G
 
 networks:
   develop-bridge-network:
